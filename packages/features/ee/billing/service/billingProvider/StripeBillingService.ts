@@ -132,6 +132,10 @@ export class StripeBillingService implements IBillingProviderService {
   }
 
   async handleSubscriptionCancel(subscriptionId: string) {
+    if (!process.env.STRIPE_PRIVATE_KEY) {
+      console.warn("Skipping Stripe subscription cancellation (STRIPE_PRIVATE_KEY missing)");
+      return;
+    }
     await this.stripe.subscriptions.cancel(subscriptionId);
   }
 
